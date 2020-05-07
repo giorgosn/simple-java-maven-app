@@ -1,11 +1,14 @@
 pipeline {
     agent {
-        docker { image 'node:7-alpine' }
+        docker {
+            image 'maven:3-alpine' 
+            args ' --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1  -v /root/.m2:/root/.m2' 
+        }
     }
     stages {
-        stage('Test') {
+        stage('Build') { 
             steps {
-                sh 'node --version'
+                sh 'mvn -B -DskipTests clean package' 
             }
         }
     }
